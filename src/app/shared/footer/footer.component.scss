@@ -1,0 +1,15 @@
+footer {
+  background-color: black;
+  padding: 10px 0;
+  .title {
+    font-weight: bold;
+    font-size: 24px;
+  }
+  .rounded-circle {
+    height: 40px;
+    width: 40px;
+    i {
+      font-size: 20px;
+    }
+  }
+}

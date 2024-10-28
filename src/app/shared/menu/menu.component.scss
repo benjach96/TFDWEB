@@ -1,0 +1,19 @@
+.content-menu{
+  .list-menu {
+    list-style: none;
+    background-color: #D6D1C5;
+    li {
+      font-weight: bold;
+      cursor: pointer;
+      padding: 20px 30px;
+      margin: 0 40px;
+      &:first-child, &:last-child{
+        margin: 0;
+      }
+      &:hover{
+        background-color: black;
+        color: #fff;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<div
+  class="content-background d-flex justify-content-center align-items-center"
+>
+  <div class="background-image"></div>
+  <div class="background-cover-image"></div>
+
+  <div class="content-login p-4 bg-white rounded w-25 shadow-lg">
+    <h2 class="text-center">Bienvenido a BetonDecken</h2>
+    <hr class="my-4" />
+    <form>
+      <div class="form-group">
+        <label for="username">Email:</label>
+        <input id="username" type="text" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input id="password" type="password" class="form-control" />
+      </div>
+      <div class="form-group mt-5">
+        <button [routerLink]="['/home']" class="btn btn-primary btn-block">
+          Login
+        </button>
+      </div>
+      <div class="form-group text-center">
+        <a href="javascript:;">¿Olvidaste tu contraseña?</a>
+      </div>
+      <hr />
+      <div class="form-group">
+        <p class="text-center">¿No tienes una cuenta?</p>
+        <button class="btn btn-success btn-block" [routerLink]="['/register']">
+          Registrate aquí
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
