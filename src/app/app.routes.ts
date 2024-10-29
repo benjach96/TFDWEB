@@ -5,6 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { TrackingComponent } from './pages/tracking/tracking.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { SupportComponent } from './pages/support/support.component';
+import { loggedInGuard } from './logged-in.guard';
 
 export const routes: Routes = [
   {
@@ -14,16 +15,22 @@ export const routes: Routes = [
     path: 'register', component: RegisterComponent
   },
   {
-    path: 'home', component: HomeComponent
-  },
-  {
-    path: 'tracking', component: TrackingComponent
-  },
-  {
-    path: 'history', component: HistoryComponent
-  },
-  {
-    path: 'support', component: SupportComponent
+    path: 'protected',
+    canActivate: [loggedInGuard],
+    children: [
+      {
+        path: '', component: HomeComponent
+      },
+      {
+        path: 'tracking', component: TrackingComponent
+      },
+      {
+        path: 'history', component: HistoryComponent
+      },
+      {
+        path: 'support', component: SupportComponent
+      },
+    ]
   },
   {
     path: '**',
