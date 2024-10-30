@@ -52,7 +52,7 @@ export class BackendService {
       this.saveDatabase();
     }
 
-    console.log('Carga completada.', result);
+    //console.log('Carga completada.', result);
 
     return result;
   }
