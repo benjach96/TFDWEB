@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from "../../shared/header/header.component";
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ export class LoginComponent {
   isLoggingIn = false;
   isInvalidUser = false;
   errorMessage = '';
+  message = '';
 
   applyForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -25,12 +26,20 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
+    private route: ActivatedRoute,
     private router: Router
   ) {
+    // Recuperar el mensaje si es que es un redirect desde el registro de un nuevo cliente
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { message: string };
+    if (state) {
+      this.message = state.message;
+    };
   }
 
   async login() {
     this.errorMessage = '';
+    this.message = '';
     this.isLoggingIn = true;
 
     var result = await this.authService.login(

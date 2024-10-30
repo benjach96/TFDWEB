@@ -1,11 +1,11 @@
-import { User } from '../model/user';
+import { Usuario } from '../model/usuario';
 import { OrdenDeTrabajo } from '../model/ordenDeTrabajo';
 import { OrdenPorUsuario } from '../model/ordenPorUsuario';
 import { Envio } from '../model/envio';
 import { Fabrica } from '../model/fabrica';
 
 export type Database = {
-    usuarios: User[],
+    usuarios: Usuario[],
     ordenes: OrdenDeTrabajo[],
     ordenesPorUsuario: OrdenPorUsuario[],
     envios: Envio[],

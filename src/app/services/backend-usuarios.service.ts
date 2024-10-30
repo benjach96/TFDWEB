@@ -1,5 +1,7 @@
+import { ErrorSimple } from "../model/errorSimple";
 import { NuevoUsuarioInput } from "../model/nuevoUsuarioInput";
 import { PostUsuarioDTO } from "../model/postUsuarioDTO";
+import { Usuario } from "../model/usuario";
 import { VerificarCredencialesInput } from "../model/verificarCredencialesInput";
 import { BackendService } from "./backend.service";
 
@@ -39,8 +41,39 @@ export class BackendUserService {
     });
   }
 
-  postUsuario(nuevoUsuario: NuevoUsuarioInput): PostUsuarioDTO {
-    throw new Error("Method not implemented.");
+  postUsuario(nuevoUsuario: NuevoUsuarioInput): Promise<PostUsuarioDTO | ErrorSimple> {
+    return new Promise((resolve, reject) => {
+      try {
+        // Nota: Este método es un mock de la funcionalidad de registro de usuarios.
+        const user = this.backendService.getDatabase().usuarios.find(user => user.email == nuevoUsuario.email);
+        if (user) {
+          // Simular demora de red
+          setTimeout(() => {
+            resolve({ codigo: 99, mensaje: "El usuario ya existe" });
+          }, 1000); // demora de 1 segundo
+        }
+        else {
+          const newUser: Usuario = {
+            apellidos: nuevoUsuario.apellidos,
+            email: nuevoUsuario.email,
+            estado: "A",
+            fechaDeCreacion: new Date(),
+            nombres: nuevoUsuario.nombres,
+            passwordHash: nuevoUsuario.password,
+            usuarioId: this.backendService.getDatabase().usuarios.length + 1
+          }
+          this.backendService.getDatabase().usuarios.push(newUser);
+          this.backendService.saveDatabase();
+          // Simular demora de red
+          setTimeout(() => {
+            resolve(newUser);
+          }, 1000); // demora de 1 segundo
+        }
+      }
+      catch {
+        reject();
+      }
+    });
   }
 
 }

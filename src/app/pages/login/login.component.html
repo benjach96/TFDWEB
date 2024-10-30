@@ -23,6 +23,9 @@
         <div class="alert alert-warning mt-3" role="alert" *ngIf="isLoggingIn">
           Verificando credenciales...
         </div>
+        <div class="alert alert-success mt-3" role="alert" *ngIf="message">
+          {{message}}
+        </div>
         <div class="alert alert-danger mt-3" role="alert" *ngIf="errorMessage">
           {{ errorMessage }}
         </div>
