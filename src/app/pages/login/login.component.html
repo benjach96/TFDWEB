@@ -7,7 +7,7 @@
   <div class="content-login p-4 bg-white rounded w-25 shadow-lg">
     <h2 class="text-center">Bienvenido a BetonDecken</h2>
     <hr class="my-4" />
-    <form [formGroup]="applyForm" (ngSubmit)="login()">
+    <form [formGroup]="applyForm" (submit)="login()">
       <div class="form-group">
         <label for="username">Email:</label>
         <input id="username" type="text" class="form-control" formControlName="email"/>
@@ -20,6 +20,9 @@
         <button type="submit" class="btn btn-primary btn-block" [disabled]="!applyForm.valid || isLoggingIn">
           Login
         </button>
+        <div class="alert alert-warning mt-3" role="alert" *ngIf="isLoggingIn">
+          Verificando credenciales...
+        </div>
         <div class="alert alert-danger mt-3" role="alert" *ngIf="errorMessage">
           {{ errorMessage }}
         </div>

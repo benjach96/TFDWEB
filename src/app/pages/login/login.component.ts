@@ -24,21 +24,19 @@ export class LoginComponent {
   });
 
   constructor(
-    private userService: AuthService,
+    private authService: AuthService,
     private router: Router
   ) {
   }
 
   async login() {
-    console.log('start:login');
     this.errorMessage = '';
     this.isLoggingIn = true;
 
-    var result = await this.userService.login(
+    var result = await this.authService.login(
       this.applyForm.value.email ?? '', this.applyForm.value.password ?? '');
 
     this.isLoggingIn = false;
-    console.log('result:', result);
     if (!result) {
       this.isInvalidUser = true;
       this.errorMessage = 'Invalid email or password';
@@ -46,7 +44,6 @@ export class LoginComponent {
     else {
       this.router.navigate(['/protected']);
     }
-    
-    console.log('end:login');
+
   }
 }

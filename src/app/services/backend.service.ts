@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { User } from '../model/user';
 import { BackendUserService } from './backend-usuarios.service';
 import { Database, db } from './db';
+import { BackendOrdenesService } from './backend-ordenes.service';
+import { SecurityService } from './security.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,30 +10,38 @@ import { Database, db } from './db';
 export class BackendService {
 
   users: BackendUserService;
+  ordenes: BackendOrdenesService;
   /**
    * Emulación de una base de datos en memoria. Se reemplazará por una API REST en la siguiente iteración.
    */
-  database: Database;
+  private database: Database;
 
-  constructor() {
+  constructor(private securityService: SecurityService) {
     this.users = new BackendUserService(this);
+    this.ordenes = new BackendOrdenesService(this, securityService);
     this.database = this.loadDatabase();
+    //this.database = db;
   }
 
   loadDatabase(): Database {
-    console.log('Cargando base de datos...');
+    //console.log('Cargando base de datos...');
     let result: Database;
 
-    // if (typeof window !== 'undefined') {
-    //   result = JSON.parse(localStorage.getItem('db') ?? '{}');
-    // } else {
-    //   result = db; // Valor por defecto si localStorage no está disponible
-    // }
-
-    try{
-      result = JSON.parse(localStorage.getItem('db') ?? '{}');
-    }
-    catch {
+    if (typeof window !== 'undefined') {
+      try{
+        result = JSON.parse(localStorage.getItem('db') ?? '{}', (key, value) => {
+          // localStorage solo soporta strings, por lo que las fechas se convierten en strings al guardarlas
+          // Aquí las convertimos nuevamente a objetos Date
+          if (key.indexOf("fecha") !== -1) {
+            return new Date(value);
+          }
+          return value;
+        });
+      }
+      catch {
+        result = db; // Valor por defecto si localStorage no está disponible
+      }
+    } else {
       result = db; // Valor por defecto si localStorage no está disponible
     }
 
@@ -54,4 +63,9 @@ export class BackendService {
       localStorage.setItem('db', JSON.stringify(this.database));
     }
   }
+
+  getDatabase(): Database {
+    return this.database;
+  }
+
 }

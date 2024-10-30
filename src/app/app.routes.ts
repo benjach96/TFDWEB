@@ -6,10 +6,14 @@ import { TrackingComponent } from './pages/tracking/tracking.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { SupportComponent } from './pages/support/support.component';
 import { loggedInGuard } from './logged-in.guard';
+import { LogoutComponent } from './pages/logout/logout.component';
 
 export const routes: Routes = [
   {
     path: 'login', component: LoginComponent
+  },
+  {
+    path: 'logout', component: LogoutComponent
   },
   {
     path: 'register', component: RegisterComponent
@@ -22,7 +26,7 @@ export const routes: Routes = [
         path: '', component: HomeComponent
       },
       {
-        path: 'tracking', component: TrackingComponent
+        path: 'tracking/:id', component: TrackingComponent
       },
       {
         path: 'history', component: HistoryComponent

@@ -6,9 +6,16 @@
     <div class="card-body">
       <h4>Buscar por código de seguimiento</h4>
       <form class="form-group d-flex">
-        <input type="text" class="form-control mr-3" />
+        <input type="text" [formControl]="codigoDeSeguimiento" class="form-control mr-3" />
         <!--Boton buscar-->
-        <button [routerLink]="['/tracking']" class="btn btn-success d-flex">
+        <!-- <button [routerLink]="['/tracking']" class="btn btn-success d-flex">
+          <i class="bi bi-search mr-2"></i>
+          Buscar
+        </button> -->
+        <button (click)="buscarOrden($event)" 
+          [disabled]="codigoDeSeguimiento.invalid"
+          type="button" class="btn btn-success d-flex">
+
           <i class="bi bi-search mr-2"></i>
           Buscar
         </button>
@@ -30,36 +37,55 @@
             <th scope="col"></th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let item of listhistory; let i = index">
+        <tbody *ngIf="isLoadingOrdenes">
+          <tr>
+            <td colSpan="6">
+              Cargando órdenes...
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="!isLoadingOrdenes && ordenes.length==0">
+          <tr>
+            <td colSpan="6">
+              No existen ordenes registradas
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="!isLoadingOrdenes && ordenes.length>0">
+          <tr *ngFor="let item of ordenes; let i = index">
             <!--Aqui cambio el item por lo definido en el tipescript component-->
-            <td>{{ item.Numerodeseguimiento }}</td>
-            <td>{{ item.FechaOrden }}</td>
-            <td>{{ item.FechadeRegistro }}</td>
-            <td>{{ item.FechaEntrega }}</td>
+            <td><a routerLink="tracking/{{item.codigoDeSeguimiento}}">{{ item.codigoDeSeguimiento }}</a></td>
+            <td>{{ item.fechaDeCreacion | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ item.fechaDeEnvio ? (item.fechaDeEnvio | date: 'dd/MM/yyyy') : (item.fechaEstimadaDeEnvio | date: 'dd/MM/yyyy') + ' (*)' }}</td>
+            <td>{{ item.fechaDeEntrega ? (item.fechaDeEntrega | date: 'dd/MM/yyyy') : (item.fechaEstimadaDeEntrega | date: 'dd/MM/yyyy') + ' (*)' }}</td>
+
             <td>
               <span
                 [ngClass]="{
-                  'badge badge-primary': item.Estado == 'Entregado',
-                  'badge badge-success': item.Estado == 'En Proceso',
-                  'badge badge-warning': item.Estado == 'En Fabricación'
+                  'badge badge-primary': item.estado == 'C',
+                  'badge badge-success': item.estado == 'E',
+                  'badge badge-warning': item.estado == 'P'
                 }"
               >
-                {{ item.Estado }}
+                {{ getNombreDelEstado(item.estado) }}
               </span>
             </td>
             <td>
               <button
-                (click)="DeleteTrackingBD(i)"
+                (click)="deleteOrdenPorUsuario(item.ordenDeTrabajoId)"
+                type="button"
+                title="Eliminar orden {{item.codigoDeSeguimiento}}"
                 class="btn btn-danger btn-sm"
               >
                 <i class="bi bi-trash"></i>
-                {{ i }}
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+      <p>
+        (*) Fecha estimada
+      </p>
     </div>
   </div>
 </div>

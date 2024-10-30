@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { User } from '../../model/user';
-import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { PostUsuarioDTO } from '../../model/postUsuarioDTO';
+import { SecurityService } from '../../services/security.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +13,7 @@ import { PostUsuarioDTO } from '../../model/postUsuarioDTO';
 })
 export class HeaderComponent {
   currentUser: PostUsuarioDTO;
-  constructor(userService: AuthService) {
-    this.currentUser = userService.getUser()!;
+  constructor(securityService: SecurityService) {
+    this.currentUser = securityService.getUser()!;
   }
 }
