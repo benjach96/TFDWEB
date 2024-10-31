@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,8 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {
     // Recuperar el mensaje si es que es un redirect desde el registro de un nuevo cliente
     const navigation = this.router.getCurrentNavigation();
@@ -38,21 +40,26 @@ export class LoginComponent {
   }
 
   async login() {
+    this.loadingService.show();
     this.errorMessage = '';
     this.message = '';
     this.isLoggingIn = true;
+    try {
 
-    var result = await this.authService.login(
-      this.applyForm.value.email ?? '', this.applyForm.value.password ?? '');
+      var result = await this.authService.login(
+        this.applyForm.value.email ?? '', this.applyForm.value.password ?? '');
 
-    this.isLoggingIn = false;
-    if (!result) {
-      this.isInvalidUser = true;
-      this.errorMessage = 'Invalid email or password';
+      this.isLoggingIn = false;
+      if (!result) {
+        this.isInvalidUser = true;
+        this.errorMessage = 'Invalid email or password';
+      }
+      else {
+        this.router.navigate(['/protected']);
+      }
     }
-    else {
-      this.router.navigate(['/protected']);
+    finally {
+      this.loadingService.hide();
     }
-
   }
 }

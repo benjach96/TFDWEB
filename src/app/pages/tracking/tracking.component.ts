@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { DetalleDeOrdenDTO } from '../../model/detalleDeOrdenDTO';
 import { CommonModule } from '@angular/common';
+import { LoadingService } from '../../services/loading.service';
 
 
 @Component({
@@ -32,12 +33,17 @@ export class TrackingComponent {
   isError= false;
   orden: DetalleDeOrdenDTO | null = null;
 
-  constructor(route: ActivatedRoute, private backend: BackendService, private geocoder: MapGeocoder) {
+  constructor (route: ActivatedRoute,
+    private backend: BackendService,
+    private geocoder: MapGeocoder,
+    private loadingService: LoadingService
+  ) {
     this.codigoDeSeguimiento = route.snapshot.params['id'];
     this.loadOrden();
   }
 
   async loadOrden() {
+    this.loadingService.show();
     console.log('loading orden: ' + this.codigoDeSeguimiento);
     try {
       this.orden = await this.backend.ordenes.getOrdenPorCodigoDeSeguimiento(this.codigoDeSeguimiento);
@@ -57,12 +63,15 @@ export class TrackingComponent {
               lng: result.results[0].geometry.location.lng(),
             };
           };
-        });        
+        });
       }
     }
     catch (error: any) {
       this.isError = true;
       console.log(error);
+    }
+    finally {
+      this.loadingService.hide();
     }
 
     this.isLoading = false;
