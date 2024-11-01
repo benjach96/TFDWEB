@@ -5,30 +5,40 @@
   <div class="content-register p-4 bg-white rounded w-25 shadow-lg">
     <h2 class="text-center">Nuevo Registro</h2>
     <hr class="my-3">
-    <form >
+    <form [formGroup]="newRecordForm">
       <div class="form-group">
         <label for="name">Nombres:</label>
-        <input id="name" type="text" class="form-control"  />
+        <input formControlName="nombres" type="text" class="form-control" title="Nombres" />
       </div>
       <div class="form-group">
         <label for="lastname">Apellidos:</label>
-        <input id="lastname" type="text" class="form-control" />
+        <input formControlName="apellidos" type="text" class="form-control" title="Apellidos" />
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
-        <input id="email" type="text" class="form-control" />
+        <input formControlName="email" type="text" class="form-control" title="Email" />
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input id="password" type="password" class="form-control" />
+        <input formControlName="password" type="password" class="form-control" title="Password" />
       </div>
       <div class="form-group">
         <label for="passwordConfirm">Confirmar Password:</label>
-        <input id="passwordConfirm" type="password" class="form-control" />
+        <input formControlName="confirmacionDePassword" type="password" class="form-control"
+          title="Confirmacion de Password" />
       </div>
       <div class="form-group mt-4">
-        <button class="btn btn-primary btn-block" [routerLink]="['/home']" >Crear cuenta</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="createAccount()">Crear cuenta</button>
       </div>
     </form>
+    <div class="alert alert-warning mt-3" role="alert" *ngIf="isSaving">
+      Creando el Usuario...
+    </div>
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="isError">
+      {{errorMessage}}
+    </div>
+    <h3>{{newRecordForm.status}}</h3>
+
+    <button type="button" class="btn btn-primary btn-block" (click)="testState()">Test State</button>
   </div>
 </div>

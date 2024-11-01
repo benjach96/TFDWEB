@@ -1,53 +1,106 @@
 <div class="container">
-  <div class="my-5">
-    <app-menu></app-menu>
-  </div>
-  <div class="card shadow my-5">
-    <div class="card-body">
-      <div class="d-flex justify-content-around mb-3">
-        <div class="d-flex">
-          <img src="assets/images/profile-default.png" height="120" />
-          <ul class="list-data ml-2">
-            <li>
-              <span class="font-weight-bold mr-2">Conductor:</span>
-              <span>Ricardo Castillo</span>
-            </li>
-            <li>
-              <span class="font-weight-bold mr-2">Teléfono:</span>
-              <span>999-999-999</span>
-            </li>
-          </ul>
-        </div>
-        <ul class="list-data">
-          <li>
-            <span class="font-weight-bold mr-2">Salida:</span>
-            <span>Nombre de fábrica</span>
-          </li>
-          <li>
-            <span class="font-weight-bold mr-2">Salida estimada:</span>
-            <span>Salida estimada</span>
-          </li>
-          <li>
-            <span class="font-weight-bold mr-2">Llegada:</span>
-            <span>Lugar de entrega</span>
-          </li>
-          <li>
-            <span class="font-weight-bold mr-2">Peso:</span>
-            <span>xx KG</span>
-          </li>
-        </ul>
-      </div>
-      <div class="d-flex justify-content-center">
-        <span class="badge badge-pill badge-primary justify-content-center align-content-center ml-2 p-2 px-3" style="font-size: 16px;">Estado: En Proceso</span>
-      </div>
-      
+    <div class="my-5">
+        <app-menu></app-menu>
     </div>
-  </div>
+    <div class="alert alert-warning" *ngIf="isLoading">
+        Cargando orden con codigo de seguimiento {{ codigoDeSeguimiento }}...
+    </div>
+    <div class="alert alert-danger" *ngIf="isNotFound">
+        El codigo de seguimiento {{ codigoDeSeguimiento }} no se pudo encontrar.
+    </div>
+    <div *ngIf="!isLoading && !isError && !isNotFound">
+        <div class="card shadow my-5">
+            <div class="card-body">
+                <div class="d-flex justify-content-around mb-3">
+                    <div class="d-flex">
+                        <img src="assets/images/profile-default.png" height="120" />
+                        <div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th class="text-right">
+                                            Conductor:
+                                        </th>
+                                        <td *ngIf="orden?.conductorNombres">
+                                            {{orden?.conductorNombres}} {{orden?.conductorApellidos}}
+                                        </td>
+                                        <td *ngIf="!orden?.conductorNombres">
+                                            No Asignado
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-right">
+                                            Teléfono:
+                                        </th>
+                                        <td>
+                                            {{orden?.conductorTelefono ?? 'No Asignado'}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Lugar de Salida:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.nombreDeLaFabrica}}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="!orden?.fechaDeEnvio">
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Fecha de Salida estimada:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.fechaEstimadaDeEnvio | date: 'dd/MM/yyyy'}}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="orden?.fechaDeEnvio">
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Fecha de Salida:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.fechaDeEnvio | date: 'dd/MM/yyyy'}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Lugar de Entrega:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.lugarDeEntrega}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Peso:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.pesoEnKilos | number:'1.0-0'}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span class="badge badge-pill badge-primary justify-content-center align-content-center ml-2 p-2 px-3"
+                          style="font-size: 16px;">Estado: {{getNombreDelEstado(orden!.estado)}}</span>
+                </div>
 
-  <div class="card shadow my-5">
-    <div class="card-body">
-      <google-map [center]="center" [zoom]="zoom" height="500px" width="100%">
-      </google-map>
+            </div>
+        </div>
+
+        <div class="card shadow my-5">
+            <div class="card-body">
+                <h2>{{orden?.direccionDeEntrega}}</h2>
+                <br />
+                <google-map [center]="center" [zoom]="zoom" height="500px" width="100%">
+                    <map-marker [position]="center" [label]="{text: 'Destino', color: 'Black'}"></map-marker>
+                </google-map>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

@@ -2,5 +2,8 @@
   <div class="container d-flex">
     <img style="cursor: pointer;" src="assets/images/logo-beton-decken.png" [routerLink]="['/home']"   alt="">
     <h2 class="text-white text-center d-flex justify-content-center align-items-center">BetonDecken - Sistema de Seguimiento</h2>
+    <div *ngIf="getCurrentUser()" class="user">
+      Hola {{getCurrentUser().nombres}}!
+    </div>
   </div>
 </header>

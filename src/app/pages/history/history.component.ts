@@ -3,6 +3,7 @@ import { MenuComponent } from '../../shared/menu/menu.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData } from 'chart.js';
 import { CommonModule } from '@angular/common';
+import { BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-history',
@@ -36,4 +37,10 @@ export class HistoryComponent {
       },
     ],
   };
+
+  constructor(private backendService: BackendService) {
+    backendService.ordenes.getOrdenes().then((ordenes) => {
+      console.log(ordenes);
+    });
+  }
 }
