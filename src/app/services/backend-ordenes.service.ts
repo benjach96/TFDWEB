@@ -112,11 +112,13 @@ export class BackendOrdenesService {
           ordenPorUsuario => ordenPorUsuario.ordenDeTrabajoId == orden!.ordenDeTrabajoId && ordenPorUsuario.usuarioId == userId);
 
         if (!ordenPorUsuario) {
+          //console.log("Agregando orden a la lista de ordenes del usuario", orden.ordenDeTrabajoId);
           db.ordenesPorUsuario.push({
             ordenDeTrabajoId: orden.ordenDeTrabajoId,
             usuarioId: userId,
             fechaDeCreacion: new Date()
           });
+          this.backendService.saveDatabase();
         }
 
         // Simular demora de red

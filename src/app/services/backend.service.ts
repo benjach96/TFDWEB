@@ -39,22 +39,27 @@ export class BackendService {
         });
       }
       catch {
-        result = db; // Valor por defecto si localStorage no está disponible
+        result = this.createDefaultDatabase(); // Valor por defecto si localStorage no está disponible
       }
     } else {
-      result = db; // Valor por defecto si localStorage no está disponible
+      result = this.createDefaultDatabase(); // Valor por defecto si localStorage no está disponible
     }
 
     // Si la base de datos no tiene la estructura correcta, la reiniciamos
     if (!result.usuarios) {
-      console.log('Invalido, recreando base de datos...', db);
-      this.database = result = db;
-      this.saveDatabase();
+      result = this.createDefaultDatabase();
     }
 
     //console.log('Carga completada.', result);
 
     return result;
+  }
+
+  createDefaultDatabase(): Database {
+    console.log('Creando base de datos...', db);
+    this.database = db;
+    this.saveDatabase();
+    return this.database;
   }
 
   saveDatabase() {

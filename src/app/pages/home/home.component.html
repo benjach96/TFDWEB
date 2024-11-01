@@ -1,91 +1,108 @@
 <div class="container">
-  <div class="my-5">
-    <app-menu></app-menu>
-  </div>
-  <div class="card shadow my-5">
-    <div class="card-body">
-      <h4>Buscar por código de seguimiento</h4>
-      <form class="form-group d-flex">
-        <input type="text" [formControl]="codigoDeSeguimiento" class="form-control mr-3" />
-        <!--Boton buscar-->
-        <!-- <button [routerLink]="['/tracking']" class="btn btn-success d-flex">
-          <i class="bi bi-search mr-2"></i>
-          Buscar
-        </button> -->
-        <button (click)="buscarOrden($event)" 
-          [disabled]="codigoDeSeguimiento.invalid"
-          type="button" class="btn btn-success d-flex">
-
-          <i class="bi bi-search mr-2"></i>
-          Buscar
-        </button>
-      </form>
+    <div class="my-5">
+        <app-menu></app-menu>
     </div>
-  </div>
-  <!-- desde aqui es cambiar la base de datosssss -->
-  <div class="card shadow my-5">
-    <div class="card-body">
-      <h4>Órdenes registradas</h4>
-      <table class="table mt-3">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col"># Seguimiento</th>
-            <th scope="col">Fecha Órden</th>
-            <th scope="col">Fecha Envío</th>
-            <th scope="col">Fecha Entrega</th>
-            <th scope="col">Estado</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody *ngIf="isLoadingOrdenes">
-          <tr>
-            <td colSpan="6">
-              Cargando órdenes...
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="!isLoadingOrdenes && ordenes.length==0">
-          <tr>
-            <td colSpan="6">
-              No existen ordenes registradas
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="!isLoadingOrdenes && ordenes.length>0">
-          <tr *ngFor="let item of ordenes; let i = index">
-            <!--Aqui cambio el item por lo definido en el tipescript component-->
-            <td><a routerLink="tracking/{{item.codigoDeSeguimiento}}">{{ item.codigoDeSeguimiento }}</a></td>
-            <td>{{ item.fechaDeCreacion | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ item.fechaDeEnvio ? (item.fechaDeEnvio | date: 'dd/MM/yyyy') : (item.fechaEstimadaDeEnvio | date: 'dd/MM/yyyy') + ' (*)' }}</td>
-            <td>{{ item.fechaDeEntrega ? (item.fechaDeEntrega | date: 'dd/MM/yyyy') : (item.fechaEstimadaDeEntrega | date: 'dd/MM/yyyy') + ' (*)' }}</td>
+    <div class="card shadow my-5">
+        <div class="card-body">
+            <h4>Buscar por código de seguimiento</h4>
+            <form class="form-group d-flex">
+                <input type="text" [formControl]="codigoDeSeguimiento" class="form-control mr-3" />
+                <!--Boton buscar-->
+                <!-- <button [routerLink]="['/tracking']" class="btn btn-success d-flex">
+                  <i class="bi bi-search mr-2"></i>
+                  Buscar
+                </button> -->
+                <button (click)="buscarOrden($event)"
+                        [disabled]="codigoDeSeguimiento.invalid"
+                        type="button" class="btn btn-success d-flex">
 
-            <td>
-              <span
-                [ngClass]="{
-                  'badge badge-primary': item.estado == 'C',
-                  'badge badge-success': item.estado == 'E',
-                  'badge badge-warning': item.estado == 'P'
-                }"
-              >
-                {{ getNombreDelEstado(item.estado) }}
-              </span>
-            </td>
-            <td>
-              <button
-                (click)="deleteOrdenPorUsuario(item.ordenDeTrabajoId)"
-                type="button"
-                title="Eliminar orden {{item.codigoDeSeguimiento}}"
-                class="btn btn-danger btn-sm"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p>
-        (*) Fecha estimada
-      </p>
+                    <i class="bi bi-search mr-2"></i>
+                    Buscar
+                </button>
+            </form>
+        </div>
     </div>
-  </div>
+    <!-- desde aqui es cambiar la base de datosssss -->
+    <div class="card shadow my-5">
+        <div class="card-body">
+            <h4>Órdenes registradas</h4>
+            <table class="table mt-3">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"># Seguimiento</th>
+                        <th scope="col">Fecha Órden</th>
+                        <th scope="col">Fecha Envío</th>
+                        <th scope="col">Fecha Entrega</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="isLoadingOrdenes">
+                    <tr>
+                        <td colSpan="6">
+                            Cargando órdenes...
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!isLoadingOrdenes && ordenes.length==0">
+                    <tr>
+                        <td colSpan="6">
+                            No existen ordenes registradas
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!isLoadingOrdenes && ordenes.length>0">
+                    <tr *ngFor="let item of ordenes; let i = index">
+                        <!--Aqui cambio el item por lo definido en el tipescript component-->
+                        <td><a routerLink="tracking/{{item.codigoDeSeguimiento}}">{{ item.codigoDeSeguimiento }}</a></td>
+                        <td>{{ item.fechaDeCreacion | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ item.fechaDeEnvio ? (item.fechaDeEnvio | date: 'dd/MM/yyyy') : (item.fechaEstimadaDeEnvio | date: 'dd/MM/yyyy') + ' (*)' }}</td>
+                        <td>{{ item.fechaDeEntrega ? (item.fechaDeEntrega | date: 'dd/MM/yyyy') : (item.fechaEstimadaDeEntrega | date: 'dd/MM/yyyy') + ' (*)' }}</td>
+
+                        <td>
+                            <span [ngClass]="{
+                                  'badge badge-primary': item.estado == 'C',
+                                  'badge badge-success': item.estado == 'E',
+                                  'badge badge-warning': item.estado == 'P'
+                                }">
+                                {{ getNombreDelEstado(item.estado) }}
+                            </span>
+                        </td>
+                        <td>
+                            <button (click)="deleteOrdenPorUsuario2(item.ordenDeTrabajoId)"
+                                    type="button"
+                                    title="Eliminar orden {{item.codigoDeSeguimiento}}"
+                                    class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                (*) Fecha estimada
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmacionModalLabel">Confirmación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Desea remover este codigo de seguimiento?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" (click)="deleteOrdenPorUsuario3()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

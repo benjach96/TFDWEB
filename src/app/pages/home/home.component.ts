@@ -5,6 +5,9 @@ import { Router, RouterLink } from '@angular/router';
 import { ResumenDeOrdenDTO } from '../../model/resumenDeOrdenDTO';
 import { BackendService } from '../../services/backend.service';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LoadingService } from '../../services/loading.service';
+
+declare var $: any;
 
 @Component({
   selector: 'app-home',
@@ -20,7 +23,7 @@ export class HomeComponent {
 
   codigoDeSeguimiento = new FormControl('', Validators.required);
 
-  constructor(private backendService: BackendService, private router: Router) {
+  constructor(private backendService: BackendService, private router: Router, private loadingService: LoadingService) {
     this.loadOrdenes();
   }
 
@@ -35,6 +38,23 @@ export class HomeComponent {
   async deleteOrdenPorUsuario(ordenDeTrabajoId: number) {
     await this.backendService.ordenes.deleteOrdenPorUsuario(ordenDeTrabajoId);
     await this.loadOrdenes();
+  }
+
+  async deleteOrdenPorUsuario2(ordenDeTrabajoId: number) {
+    $('#confirmacionModal').modal('show');
+    $('#confirmacionModal').data('ordenDeTrabajoId', ordenDeTrabajoId);
+  }
+
+  async deleteOrdenPorUsuario3() {
+    console.log('deleteOrdenPorUsuario3:start');
+    this.loadingService.show();
+    var ordenDeTrabajoId = $('#confirmacionModal').data('ordenDeTrabajoId');
+    console.log('deleteOrdenPorUsuario3', ordenDeTrabajoId);
+    await this.backendService.ordenes.deleteOrdenPorUsuario(ordenDeTrabajoId);
+    $('#confirmacionModal').modal('hide');
+    await this.loadOrdenes();
+    this.loadingService.hide();
+    console.log('deleteOrdenPorUsuario3:end');
   }
 
   async buscarOrden(e: Event) {
