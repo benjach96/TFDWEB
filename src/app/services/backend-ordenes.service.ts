@@ -4,6 +4,7 @@ import { DetalleDeOrdenDTO } from '../model/detalleDeOrdenDTO';
 import { BackendService } from './backend.service';
 import { AuthService } from './auth.service';
 import { SecurityService } from './security.service';
+import { Conductor } from '../model/conductor';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ export class BackendOrdenesService {
             throw new Error("No se encontró la orden de trabajo asociada a la orden del usuario");
           }
           var envios = db.envios.filter(envio => envio.ordenDeTrabajoId == orden!.ordenDeTrabajoId);
-          var envio = envios.length > 0 ? envios[0] : null;
+          var envio = envios.length > 0 ? envios[0] : undefined;
+
           var resumenDeOrden: ResumenDeOrdenDTO = {
             codigoDeSeguimiento: orden?.codigoDeSeguimiento,
             fechaDeCreacion: orden?.fechaDeCreacion,
@@ -76,6 +78,11 @@ export class BackendOrdenesService {
           throw new Error("No se encontró la fábrica asociada a la orden de trabajo");
         }
         const envio = db.envios.find(envio => envio.ordenDeTrabajoId == orden!.ordenDeTrabajoId);
+        let conductor: Conductor | undefined = undefined;
+
+        if (envio) {
+          conductor = db.conductores.find(conductor => conductor.conductorId == envio.conductorId);
+         }
 
         const result: DetalleDeOrdenDTO = {
           clienteId: orden.clienteId,
@@ -93,7 +100,11 @@ export class BackendOrdenesService {
           lugarDeEntrega: orden.lugarDeEntrega,
           nombreDeLaFabrica: fabrica.nombre,
           pesoEnKilos: orden.pesoEnKilos,
-          envioId: envio?.envioId
+          envioId: envio?.envioId,
+          conductorId: conductor?.conductorId,
+          conductorNombres: conductor?.nombres,
+          conductorApellidos: conductor?.apellidos,
+          conductorTelefono: conductor?.telefono,
         };
 
         // Agregar orden a la lista de ordenes del usuario

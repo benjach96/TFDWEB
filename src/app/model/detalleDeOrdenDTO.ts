@@ -14,5 +14,9 @@ export interface DetalleDeOrdenDTO {
   fabricaId: number;
   nombreDeLaFabrica: string;
   envioId?: number;
+  conductorId?: number;
+  conductorNombres?: string;
+  conductorApellidos?: string;
+  conductorTelefono?: string;
   estado: string;
 }
