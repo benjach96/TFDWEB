@@ -14,42 +14,76 @@
                 <div class="d-flex justify-content-around mb-3">
                     <div class="d-flex">
                         <img src="assets/images/profile-default.png" height="120" />
-                        <ul class="list-data ml-2">
-                            <li>
-                                <span class="font-weight-bold mr-2">Conductor:</span>
-                                <span *ngIf="orden?.conductorNombres; else noEnviado">{{orden?.conductorNombres}} {{orden?.conductorApellidos}}</span>
-                                <ng-template #noEnviado>
-                                    *** TBD ***
-                                </ng-template>
-                            </li>
-                            <li>
-                                <span class="font-weight-bold mr-2">Teléfono:</span>
-                                <span>{{orden?.conductorTelefono ?? '*** TBD ***'}}</span>
-                            </li>
-                        </ul>
+                        <div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th class="text-right">
+                                            Conductor:
+                                        </th>
+                                        <td *ngIf="orden?.conductorNombres">
+                                            {{orden?.conductorNombres}} {{orden?.conductorApellidos}}
+                                        </td>
+                                        <td *ngIf="!orden?.conductorNombres">
+                                            No Asignado
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-right">
+                                            Teléfono:
+                                        </th>
+                                        <td>
+                                            {{orden?.conductorTelefono ?? 'No Asignado'}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <ul class="list-data">
-                        <li>
-                            <span class="font-weight-bold mr-2">Salida:</span>
-                            <span>{{orden?.nombreDeLaFabrica}}</span>
-                        </li>
-                        <li *ngIf="!orden?.fechaDeEnvio">
-                            <span class="font-weight-bold mr-2">Salida estimada:</span>
-                            <span>{{orden?.fechaEstimadaDeEnvio | date: 'dd/MM/yyyy'}}</span>
-                        </li>
-                        <li *ngIf="orden?.fechaDeEnvio">
-                            <span class="font-weight-bold mr-2">Salida:</span>
-                            <span>{{orden?.fechaDeEnvio | date: 'dd/MM/yyyy'}}</span>
-                        </li>
-                        <li>
-                            <span class="font-weight-bold mr-2">Llegada:</span>
-                            <span>{{orden?.lugarDeEntrega}}</span>
-                        </li>
-                        <li>
-                            <span class="font-weight-bold mr-2">Peso:</span>
-                            <span>{{orden?.pesoEnKilos | number:'1.0-0'}} KG</span>
-                        </li>
-                    </ul>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Lugar de Salida:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.nombreDeLaFabrica}}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="!orden?.fechaDeEnvio">
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Fecha de Salida estimada:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.fechaEstimadaDeEnvio | date: 'dd/MM/yyyy'}}</span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="orden?.fechaDeEnvio">
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Fecha de Salida:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.fechaDeEnvio | date: 'dd/MM/yyyy'}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Lugar de Entrega:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.lugarDeEntrega}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">
+                                    <span class="font-weight-bold mr-2">Peso:</span>
+                                </th>
+                                <td>
+                                    <span>{{orden?.pesoEnKilos | number:'1.0-0'}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="d-flex justify-content-center">
                     <span class="badge badge-pill badge-primary justify-content-center align-content-center ml-2 p-2 px-3"
